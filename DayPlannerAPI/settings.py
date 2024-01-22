@@ -49,7 +49,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'dayplanner.middleware.TokenExpiryMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/hour',
+    }
+}
 
 ROOT_URLCONF = 'DayPlannerAPI.urls'
 
@@ -71,6 +84,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'DayPlannerAPI.wsgi.application'
+
+AUTH_USER_MODEL = 'dayplanner.User'
+AUTHENTICATION_BACKENDS = ['dayplanner.backends.EmailBackend']
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

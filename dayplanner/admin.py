@@ -1,5 +1,5 @@
 from django.contrib import admin
 
+from dayplanner.models import User
 
-from dayplanner.models import Note
-admin.site.register(Note)
+admin.site.register(User)

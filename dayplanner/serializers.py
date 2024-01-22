@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
-from dayplanner.models import Note, Task, Todo
+from dayplanner.models import Note, Task, Todo, User
 
 
 class NoteSerializer(serializers.HyperlinkedModelSerializer):

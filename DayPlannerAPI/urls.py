@@ -19,11 +19,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from dayplanner import views
+
 router = DefaultRouter()
 router.register(r'notes', views.NoteViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api/', include('dayplanner.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     path('admin/', admin.site.urls),
 ]
