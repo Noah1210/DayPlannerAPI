@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "dayplanner.apps.DayplannerConfig",
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,6 +90,11 @@ WSGI_APPLICATION = 'DayPlannerAPI.wsgi.application'
 
 AUTH_USER_MODEL = 'dayplanner.User'
 AUTHENTICATION_BACKENDS = ['dayplanner.backends.EmailBackend']
+
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:5173',  # Replace with your React app's address
+# ]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
