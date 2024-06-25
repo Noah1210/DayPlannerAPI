@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from dayplanner.views import NoteViewSet
 from dayplanner.views.Event import EventView
+from dayplanner.views.Note import NoteView
 from dayplanner.views.Task import TaskView
 from dayplanner.views.auth_views import RefreshTokenView, registration_view, logout_view, loginView
 
@@ -15,4 +16,6 @@ urlpatterns = [
     path('event/<int:pk>', EventView.as_view(), name='event-specific'),
     path('task/', TaskView.as_view(), name='task-all'),
     path('task/<int:pk>', TaskView.as_view(), name='task-specific'),
+    path('note/', NoteView.as_view(), name='note-all'),
+    path('note/<int:pk>', NoteView.as_view(), name='note-specific'),
 ]

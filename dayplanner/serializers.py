@@ -41,11 +41,9 @@ class RefreshTokenSerializer(serializers.Serializer):
 
 
 class NoteSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-
     class Meta:
         model = Note
-        fields = ['content', 'date', 'user']
+        fields = ['id', 'content', 'date']
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):

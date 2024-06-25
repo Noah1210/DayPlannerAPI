@@ -5,5 +5,5 @@ from DayPlannerAPI import settings
 
 class Note(models.Model):
     content = models.TextField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
