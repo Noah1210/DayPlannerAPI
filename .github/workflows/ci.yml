@@ -9,51 +9,68 @@ on:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:5.7
         env:
-          MYSQL_DATABASE: django_db
-          MYSQL_USER: django_user
-          MYSQL_PASSWORD: django_password
-          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: dayplanner
         ports:
           - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+        options: --health-cmd='mysqladmin ping --silent' --health-start-period=30s --health-timeout=30s --health-retries=5
 
-  steps:
-    - name: Checkout code
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Python
+    # Set up Python
+    - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: '3.9'
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Set up environment variables
+    - name: Set up environment variables
+      run: echo "DATABASE_URL=mysql://root:root@127.0.0.1:3306/dayplanner" >> $GITHUB_ENV
+
+    # Run migrations to set up the database
+    - name: Run migrations
+      run: python manage.py migrate
+
+    # Run tests
+    - name: Run tests
+      run: python manage.py test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test  # Ensure tests pass before deployment
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run migrations
-      env:
-        USER: django_user
-        DATABASE: django_db
-        PASSWORD: django_password
-        DATABASE_URL: mysql://django_user:django_password@localhost:3306/django_db
-      run: python manage.py migrate
-
-    - name: Run tests
-      env:
-        USER: django_user
-        DATABASE: django_db
-        PASSWORD: django_password
-        DATABASE_URL: mysql://django_user:django_password@localhost:3306/django_db
-      run: python manage.py test
+    - name: Deploy to production server
+      run: |
+        # Add your deployment commands here
+        # For example, if you deploy to an EC2 instance:
+        # ssh user@server 'cd /path/to/project && git pull && systemctl restart gunicorn'
+        echo "Deploying to production"
